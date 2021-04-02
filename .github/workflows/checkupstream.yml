@@ -23,7 +23,10 @@ jobs:
         upstream_branch: master
         target_branch: master_upstream
 
-    - name: Check for new commits
+    - name: Notify if new commits
+      uses: ivanmilov/telegram_notify_action@v1
+      with:
+        api_key: ${{secrets.API_KEY}}
+        chat_id: ${{secrets.CHAT_ID}}
+        message: "New commit in upstream repo ${{github.repository}}"
       if: ${{ steps.sync.outputs.has_new_commits == 'true' }}
-      run: curl -s -X POST --connect-timeout 10 https://api.telegram.org/bot${{secrets.API_KEY}}/sendMessage -d chat_id=${{secrets.CHAT_ID}} -d parse_mode="Markdown" -d text="New commit in upstream repo ${{github.repository}}"
-
